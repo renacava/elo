@@ -12,8 +12,8 @@
 
     (list
      :rating-1 (+ rating-1 (* k (if did-1-win
-                                       (- 1 probability-2-wins)
-                                       (- 1 probability-1-wins))))
+                                    (- 1 probability-2-wins)
+                                    (- probability-2-wins))))
      :rating-2 (+ rating-2 (* k (if did-1-win
-                                       (- probability-1-wins)
-                                       (- probability-1-wins)))))))
+                                    (- probability-1-wins)
+                                    (- 1 probability-1-wins)))))))
