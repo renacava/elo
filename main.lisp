@@ -65,5 +65,8 @@
 (defun get-entrant-rating (entrant-id)
   (gethash (ensure-entrant entrant-id) rankings-table))
 
+(defun get-entrant-ratings (entrant-ids)
+  (mapcar #'get-entrant-rating entrant-ids))
+
 (defun print-entrant-rankings ()
   (hash-table-print rankings-table))
