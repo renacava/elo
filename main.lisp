@@ -43,7 +43,7 @@
 
 (defun ensure-entrant (entrant-id &optional (starting-rating 400))
   (unless (gethash entrant-id rankings-table)
-    (setf (gethash entrant-id rankings-table) starting-rating))
+    (register-entrant entrant-id starting-rating))
   entrant-id)
 
 (defun register-entrant (entrant-id &optional (starting-rating 400))
