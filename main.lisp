@@ -35,14 +35,10 @@
                      (elo-match entrant-1-rating entrant-2-rating)
                      (elo-match entrant-2-rating entrant-1-rating))))
     (if did-entrant-1-win
-        (progn
-          (print 'dog)
-          (set-entrant-rating entrant-1-id (getf result :winner-rating))
-          (set-entrant-rating entrant-2-id (getf result :loser-rating)))
-        (progn
-          (print 'cat)
-          (set-entrant-rating entrant-2-id (getf result :winner-rating))
-          (set-entrant-rating entrant-1-id (getf result :loser-rating))))
+        (set-entrant-ratings entrant-1-id (getf result :winner-rating)
+                             entrant-2-id (getf result :loser-rating))
+        (set-entrant-ratings entrant-2-id (getf result :winner-rating)
+                             entrant-1-id (getf result :loser-rating)))
     result))
 
 (defun ensure-entrant (entrant-id &optional (starting-rating 400))
@@ -58,6 +54,13 @@
   (if (get-entrant-rating entrant-id)
       (setf (gethash entrant-id rankings-table) new-rating)
       (register-entrant entrant-id new-rating)))
+
+(defun set-entrant-ratings (&rest entrants-and-ratings)
+  (let ((pairs (group entrants-and-ratings 2)))
+    (loop for pair in pairs
+          when (cdr pair)
+          do (set-entrant-rating (car pair) (cadr pair)))
+    pairs))
 
 (defun get-entrant-rating (entrant-id)
   (gethash (ensure-entrant entrant-id) rankings-table))
