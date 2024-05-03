@@ -1,4 +1,4 @@
->(in-package #:elo)
+(in-package #:elo)
 
 (defparameter rankings-table (make-hash-table :test #'equal))
 
