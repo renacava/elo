@@ -3,22 +3,15 @@
 (defparameter rankings-table (make-hash-table :test #'equal))
 
 (defun main ()
-  nil)
+  (let ((entrants (list 'dumbledore 'voldemort 'harry 'snape 'mcgonagall 'flitwick)))
+    (dotimes (i 1000) ;; 1000 match-ups
+      (let ((fighters (elt-random-n entrants 2))) ;; between 2 randomly chosen entrants each
+        (dotimes (i (1+ (random 100))) ;; where one entrant wins and the other loses, between 1 and 100 times in a row
+          (match-elo-entrants! (first fighters) (second fighters) t))))
+    (print-entrant-rankings)))
 
 (defun probability-a-wins (a-rating b-rating)
   (/ 1.0 (+ 1 (expt 10 (/ (- a-rating b-rating) 400)))))
-
-(defun elo (&key (rating-1 400) (rating-2 400) (k 32) (did-1-win t))
-  (let* ((probability-1-wins (probability-a-wins rating-1 rating-2))
-         (probability-2-wins (- 1.0 probability-1-wins)))
-
-    (list
-     :rating-1 (+ rating-1 (* k (if did-1-win
-                                    (- 1 probability-2-wins)
-                                    (- probability-2-wins))))
-     :rating-2 (+ rating-2 (* k (if did-1-win
-                                    (- probability-1-wins)
-                                    (- 1 probability-1-wins)))))))
 
 (defun elo-match (winner-rating loser-rating &key (k 32))
   (let* ((probability-1-wins (probability-a-wins winner-rating loser-rating))
@@ -70,3 +63,4 @@
 
 (defun print-entrant-rankings ()
   (hash-table-print rankings-table))
+ 
